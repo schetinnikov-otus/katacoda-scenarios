@@ -1,10 +1,20 @@
-Для того, чтобы запустить Кластер кубернетеса надо выполнить: 
+Для того, чтобы запустить кластер Kubernetes надо выполнить: 
 
 `launch.sh`{{execute}}
 
 Как только команда отработает, можно проверить статус нод кластера:
 
 `kubectl get nodes`{{execute}}
+
+и можем посмотреть список неймспейсов 
+
+`kubectl get namespace`{{execute}}
+
+`kubectl create namespace myapp`{{execute}}
+
+`kubectl get pods -A`{{execute}}
+
+`kubectl config set-context --current --namespace=myapp`{{execute}}
 
 Сначала будет только одна (мастер) нода, через некоторое время добавится вторая (рабочая). 
 
@@ -49,21 +59,3 @@
 За процессом удаления можно смотреть в третий терминал. 
 
 Удалятся под может достаточно долго (до минуты)
-
-Основные команды 
-
-`kubectl apply -f deployment.yaml`{{execute T1}}
-
-`kubectl apply -f service.yaml`{{execute T1}}
-
-`kubectl apply -f deployment-v2.yaml`{{execute T1}}
-
-`kubectl apply -f deployment-probes.yaml`{{execute T1}}
-
-`kubectl delete -f deployment.yaml`{{execute T1}}
-
-`kubectl delete -f service.yaml`{{execute T1}}
-
-`kubectl delete -f deployment-v2.yaml`{{execute T1}}
-
-`kubectl delete -f deployment-probes.yaml`{{execute T1}}
