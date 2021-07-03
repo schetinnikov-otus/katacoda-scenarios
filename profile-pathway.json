@@ -9,6 +9,11 @@
             "title": "Kube",
             "description": "Kube",
             "id": "kube"
+        },
+        {
+            "title": "Kube and pod demo",
+            "description": "Kube pod",
+            "id": "kube-pod"
         }
     ]
   }
