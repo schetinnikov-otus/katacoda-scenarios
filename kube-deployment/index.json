@@ -20,8 +20,7 @@
         "assets": {
             "host01": [
                 {"file": "deployment.yaml", "target": "/root/"},
-                {"file": "deployment-v2.yaml", "target": "/root/"},
-                {"file": "deployment-probes.yaml", "target": "/root/"}
+                {"file": "deployment-v2.yaml", "target": "/root/"}
             ]
         }
     },
