@@ -40,10 +40,18 @@ spec:
 
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="  replicas: 2">
-  replicas: 3
-</pre>
+  replicas: 3</pre>
 
-Удалим под:
+`kubectl apply -f deployment.yaml`{{execute T1}}
+
+`watch kubectl get pods`{{execute T2}}
+
+
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
+          image: schetinnikov/hello-app:v2</pre>
+
+`kubectl apply -f deployment.yaml`{{execute T1}}
+
 `kubectl delete -f deployment.yaml`{{execute T1}}
 
 https://[[HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]].environments.katacoda.com/
