@@ -38,7 +38,12 @@ spec:
 
 `kubectl get pods`{{execute T1}}
 
-https://[[HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]].environments.katacoda.com/
+
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="  replicas: 2">
+  replicas: 3
+</pre>
 
 Удалим под:
 `kubectl delete -f deployment.yaml`{{execute T1}}
+
+https://[[HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]].environments.katacoda.com/
