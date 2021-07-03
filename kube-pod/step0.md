@@ -57,8 +57,7 @@
 
 Откроем и увидим
 
-https://[[​HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]]
-
+https://[[HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]].environments.katacoda.com/
 
 Удалим под:
 `kubectl delete -f pod.yaml`{{execute T1}}

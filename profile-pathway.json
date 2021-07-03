@@ -14,6 +14,11 @@
             "title": "Kube and pod demo",
             "description": "Kube pod",
             "id": "kube-pod"
+        },
+        {
+            "title": "Deployment demo",
+            "description": "Deployment demo",
+            "id": "kube-deployment"
         }
     ]
   }
