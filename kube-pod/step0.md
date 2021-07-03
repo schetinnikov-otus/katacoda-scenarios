@@ -16,29 +16,24 @@
 
 `kubectl config set-context --current --namespace=myapp`{{execute}}
 
+
+Создадим под, для этого запустим в первом терминале:
+`kubectl apply -f pod.yaml`{{execute T1}}
+
+`kubectl get pods`{{execute T1}}
+
+`kubectl logs hello-demo`{{execute T1}}
+
+`kubectl exec -it hello-demo -- /bin/bash`{{execute T1}}
+
 Сначала будет только одна (мастер) нода, через некоторое время добавится вторая (рабочая). 
 
 Давайте зайдем на рабочую ноду, для этого откроем новый терминал 
 
 `ssh node01`{{execute T2}}
 
-И откроем третий терминал и запустим мониторинг ресурсов куба 
-
-`watch kubectl get all`{{execute T3}}
-
-Под
-
-Создадим под, для этого запустим в первом терминале:
-`kubectl apply -f pod.yaml`{{execute T1}}
-
-Проверяем статус пода в третьем терминале.
-
-Как только запустится можем проверить, что под реально запустился на рабочей ноде в docker:
-
 Запускаем на мастер ноде: 
 `docker ps | grep hello`{{execute T1}}
-
-Не должно быть ничего 
 
 Запускаем на рабочей ноде:
 `docker ps | grep hello`{{execute T2}}
@@ -48,10 +43,22 @@
 Получить доступ к поду можно по ip. 
 Для этого, вытаскиваем ip командой describe 
 
-`kubectl describe pod hello-app`{{execute T1}}
+`kubectl describe pod hello-demo`{{execute T1}}
 
-И можем зайти в него через curl:
-`curl http://[[PODID]]:8000/`
+`kubectl get -o json pod hello-demo`{{execute}}
+
+`kubectl get -o jsonpath='{.status.podIP}' pod hello-demo`{{execute}}
+
+`POD_IP=$(kubectl get -o jsonpath='{.status.podIP}' pod hello-demo)`{{execute}}
+
+`curl http://$POD_IP:8000/`{{execute}}
+
+`kubectl port-forward hello-demo 9000:8000`{{execute}}
+
+Откроем и увидим
+
+https://[[​HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]]
+
 
 Удалим под:
 `kubectl delete -f pod.yaml`{{execute T1}}
