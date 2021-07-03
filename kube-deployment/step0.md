@@ -10,7 +10,29 @@
 
 `kubectl config set-context --current --namespace=myapp`{{execute}}
 
-`deployment.yaml`{{open}}
+<pre class="file" data-filename="./deployment.yaml" data-target="replace">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-demo
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: hello-demo
+    spec:
+      containers:
+        - name: hello-demo
+          image: schetinnikov/hello-app:v1
+          ports:
+            - containerPort: 8000
+</pre>
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
