@@ -24,6 +24,11 @@
             "title": "Service demo",
             "description": "Service demo",
             "id": "kube-service"
+        },
+        {
+            "title": "Probes demo",
+            "description": "Probes demo",
+            "id": "kube-probes"
         }
     ]
   }
