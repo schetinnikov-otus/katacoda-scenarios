@@ -6,7 +6,7 @@
 
 `kubectl config set-context --current --namespace=myapp`{{execute}}
 
-`watch kubectl get pods`{{execute T2}}
+`watch kubectl get pod,service`{{execute T2}}
 
 <pre class="file" data-filename="./deployment.yaml" data-target="replace">
 apiVersion: apps/v1
@@ -46,48 +46,56 @@ spec:
   type: ClusterIP
 </pre>
 
-
 `kubectl apply -f deployment.yaml -f service.yaml`{{execute T1}}
 
+`kubectl describe service hello-service`{{execute T1}}
+
+`kubectl get service hello-service -o json`{{execute T1}}
+
+`CLUSTER_IP=$(kubectl get service hello-service -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
+
+`echo $CLUSTER_IP`{{execute T1}}
+
+`curl http://$CLUSTER_IP:9000/health`{{execute T1}}
+
+`while true; do curl http://$CLUSTER_IP:9000/health ; echo ''; sleep .5; done`{{execute T1}}
+
+`iptables-save | grep hello-service`{{execute T1}}
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="  replicas: 2">
   replicas: 3</pre>
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
-`kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}"`{{execute T1}}
+`kubectl describe service hello-service`{{execute T1}}
 
-`POD_NAME=$(kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}")`{{execute T1}}
+<pre class="file" data-filename="./service.yaml" data-target="insert" data-marker="  type: ClusterIP">
+  type: NodePort</pre>
 
-`kubectl delete pod $POD_NAME`{{execute T1}}
+`kubectl get service hello-service -o json`{{execute T1}}
 
-`POD_NAME=$(kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}")`{{execute T1}}
+`kubectl get service hello-service -o jsonpath="{.spec.ports[0].nodePort}"`{{execute T1}}
 
-`kubectl label pod $POD_NAME app-`{{execute T1}}
+`NODE_PORT=$(kubectl get service hello-service -o jsonpath="{.spec.ports[0].nodePort}")`{{execute T1}}
 
-`kubectl get pods --show-labels`{{execute T1}}
+`curl http://node01:$NODE_PORT/health`{{execute T1}}
 
-`kubectl label pod $POD_NAME app=hello-demo`{{execute T1}}
+`curl http://controlplane:$NODE_PORT/health`{{execute T1}}
 
-<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
-          image: schetinnikov/hello-app:v2</pre>
+<pre class="file" data-filename="./service.yaml" data-target="insert" data-marker="  type: NodePort">
+  type: LoadBalancer</pre>
 
-`kubectl apply -f deployment.yaml`{{execute T1}}
+`kubectl describe service hello-service`{{execute T1}}
 
-Rollout undo:
-<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v2">
-          image: schetinnikov/hello-app:v1</pre>
 
-`kubectl apply -f deployment.yaml`{{execute T1}}
+Service discovery
 
-<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="    type: RollingUpdate">
-    type: Recreate</pre>
+`kubectl run -it --rm busybox --image=busybox`{{execute T1}}
 
-<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
-          image: schetinnikov/hello-app:v2</pre>
+`env | grep HELLO`{{execute T1}}
 
-`kubectl apply -f deployment.yaml`{{execute T1}}
+`wget -qO- http://hello-service:9000/`{{execute T1}}
 
-`kubectl delete -f deployment.yaml`{{execute T1}}
+`wget -qO- http://hello-service.myapp:9000/`{{execute T1}}
 
-https://[[HOST_SUBDOMAIN]]-9000-[[KATACODA_HOST]].environments.katacoda.com/
+`wget -qO- http://hello-service.myapp.svc.cluster.local:9000/`{{execute T1}}
