@@ -10,6 +10,8 @@
 
 `kubectl config set-context --current --namespace=myapp`{{execute}}
 
+`watch kubectl get pods`{{execute T2}}
+
 <pre class="file" data-filename="./deployment.yaml" data-target="replace">
 apiVersion: apps/v1
 kind: Deployment
@@ -44,10 +46,33 @@ spec:
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
-`watch kubectl get pods`{{execute T2}}
+`kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}"`{{execute T1}}
 
+`POD_NAME=$(kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}")`{{execute T1}}
+
+`kubectl delete pod $POD_NAME`{{execute T1}}
+
+`POD_NAME=$(kubectl get pod -l app=hello-demo -o jsonpath="{.items[0].metadata.name}")`{{execute T1}}
+
+`kubectl label pod $POD_NAME app-`{{execute T1}}
+
+`kubectl label pod $POD_NAME app=hello-demo`{{execute T1}}
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
+          image: schetinnikov/hello-app:v2</pre>
+
+`kubectl apply -f deployment.yaml`{{execute T1}}
+
+Rollout undo:
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v2">
+          image: schetinnikov/hello-app:v1</pre>
+
+`kubectl apply -f deployment.yaml`{{execute T1}}
+
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="    type: RollingUpdate">
+    type: Recreate</pre>
+
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v2">
           image: schetinnikov/hello-app:v2</pre>
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
