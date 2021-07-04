@@ -29,6 +29,11 @@
             "title": "Probes demo",
             "description": "Probes demo",
             "id": "kube-probes"
+        },
+        {
+            "title": "Ingress demo",
+            "description": "Ingress demo",
+            "id": "kube-ingress"
         }
     ]
   }
