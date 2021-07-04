@@ -16,11 +16,6 @@
         },
         "finish": {
             "text": "finish.md"
-        },
-        "assets": {
-            "host01": [
-                {"file": "deployment-v2.yaml", "target": "/root/"}
-            ]
         }
     },
     "files": [

@@ -56,6 +56,8 @@ spec:
 
 `kubectl label pod $POD_NAME app-`{{execute T1}}
 
+`kubectl get pods --show-labels`{{execute T1}}
+
 `kubectl label pod $POD_NAME app=hello-demo`{{execute T1}}
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
@@ -72,7 +74,7 @@ Rollout undo:
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="    type: RollingUpdate">
     type: Recreate</pre>
 
-<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v2">
+<pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
           image: schetinnikov/hello-app:v2</pre>
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
