@@ -47,6 +47,8 @@ spec:
   type: ClusterIP
 </pre>
 
+`kubectl apply -f deployment.yaml -f service.yaml`{{execute T1}}
+
 `CLUSTER_IP=$(kubectl get service hello-service -o jsonpath="{.spec.clusterIP}")`{{execute T2}}
 
 `while true; do curl http://$CLUSTER_IP:9000/version ; echo ''; sleep .5; done`{{execute T2}}
@@ -68,20 +70,20 @@ spec:
           image: schetinnikov/hello-app:v2</pre>
 
 <pre class="file" data-filename="./deployment.yaml" data-target="append">
-           livenessProbe:
-              httpGet:
-                 port: 8000
-                 path: /
-              initialDelaySeconds: 10
-              periodSeconds: 5
-              timeoutSeconds: 2
-           readinessProbe:
-              httpGet:
-                 port: 8000
-                 path: /health
-              initialDelaySeconds: 1
-              periodSeconds: 5
-              timeoutSeconds: 2
+          livenessProbe:
+            httpGet:
+              port: 8000
+              path: /
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 2
+          readinessProbe:
+            httpGet:
+              port: 8000
+              path: /health
+            initialDelaySeconds: 1
+            periodSeconds: 5
+            timeoutSeconds: 2
 </pre>
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
