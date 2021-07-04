@@ -47,25 +47,26 @@ spec:
 </pre>
 
 <pre class="file" data-filename="./ingress.yaml" data-target="replace">
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: hello-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
-  - host: hello.world
-    http:
+  - http:
       paths:
-        - path: /
-          pathType: Prefix
+        - path: /myapp($|/)(.*)
           backend:
-            service:
-              name: hello-service
-              port:
-                number: 9000
+            serviceName: hello-service
+            servicePort: 9000
 </pre>
 
 `kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml`{{execute T1}}
+
+`kubectl apply -f nginx-ingress.yaml`{{execute T1}}
 
 
 
