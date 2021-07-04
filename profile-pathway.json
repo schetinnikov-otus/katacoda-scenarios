@@ -19,6 +19,11 @@
             "title": "Deployment demo",
             "description": "Deployment demo",
             "id": "kube-deployment"
+        },
+        {
+            "title": "Service demo",
+            "description": "Service demo",
+            "id": "kube-service"
         }
     ]
   }

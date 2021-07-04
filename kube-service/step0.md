@@ -1,5 +1,3 @@
-Для того, чтобы запустить кластер Kubernetes надо выполнить: 
-
 `launch.sh`{{execute}}
 
 `watch kubectl get nodes`{{execute}}
@@ -34,9 +32,22 @@ spec:
             - containerPort: 8000
 </pre>
 
-`kubectl apply -f deployment.yaml`{{execute T1}}
+<pre class="file" data-filename="./service.yaml" data-target="replace">
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-service
+spec:
+  selector:
+    app: hello-demo
+  ports:
+    - port: 9000
+      targetPort: 8000
+  type: ClusterIP
+</pre>
 
-`kubectl get pods`{{execute T1}}
+
+`kubectl apply -f deployment.yaml -f service.yaml`{{execute T1}}
 
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="  replicas: 2">

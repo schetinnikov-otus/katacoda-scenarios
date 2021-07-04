@@ -1,0 +1,33 @@
+{
+    "pathwayTitle": "Kubernetes",
+    "title": "Kubernetes",
+    "description": "Kubernetes",
+    "difficulty": "beginner",
+    "time": "10 minutes",
+    "details": {
+        "steps": [
+            {
+                "title": "Создаем и работаем с сущностью Service",
+                "text": "step0.md"
+            }
+        ],
+        "intro": {
+            "text": "intro.md"
+        },
+        "finish": {
+            "text": "finish.md"
+        }
+    },
+    "files": [
+        "deployment.yaml",
+        "service.yaml"
+    ],
+    "environment": {
+        "uilayout": "editor-terminal",
+        "uisettings": "yaml",
+        "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n"
+    },
+    "backend": {
+        "imageid": "kubernetes-cluster-running:1.18"
+    }
+}
