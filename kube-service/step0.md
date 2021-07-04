@@ -50,7 +50,7 @@ spec:
 
 `kubectl describe service hello-service`{{execute T1}}
 
-`kubectl get service hello-service -o json`{{execute T1}}
+`kubectl get service hello-service -o json | jq`{{execute T1}}
 
 `CLUSTER_IP=$(kubectl get service hello-service -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
 
@@ -58,7 +58,7 @@ spec:
 
 `curl http://$CLUSTER_IP:9000/health`{{execute T1}}
 
-`while true; do curl http://$CLUSTER_IP:9000/health ; echo ''; sleep .5; done`{{execute T1}}
+`while true; do curl http://$CLUSTER_IP:9000/ ; echo ''; sleep .5; done`{{execute T1}}
 
 `iptables-save | grep hello-service`{{execute T1}}
 
@@ -72,18 +72,22 @@ spec:
 <pre class="file" data-filename="./service.yaml" data-target="insert" data-marker="  type: ClusterIP">
   type: NodePort</pre>
 
-`kubectl get service hello-service -o json`{{execute T1}}
+`kubectl apply -f service.yaml`{{execute T1}}
+
+`kubectl get service hello-service -o json | jq`{{execute T1}}
 
 `kubectl get service hello-service -o jsonpath="{.spec.ports[0].nodePort}"`{{execute T1}}
 
 `NODE_PORT=$(kubectl get service hello-service -o jsonpath="{.spec.ports[0].nodePort}")`{{execute T1}}
 
-`curl http://node01:$NODE_PORT/health`{{execute T1}}
+`curl http://node01:$NODE_PORT/`{{execute T1}}
 
-`curl http://controlplane:$NODE_PORT/health`{{execute T1}}
+`curl http://controlplane:$NODE_PORT/`{{execute T1}}
 
 <pre class="file" data-filename="./service.yaml" data-target="insert" data-marker="  type: NodePort">
   type: LoadBalancer</pre>
+
+`kubectl apply -f service.yaml`{{execute T1}}
 
 `kubectl describe service hello-service`{{execute T1}}
 
@@ -99,3 +103,5 @@ Service discovery
 `wget -qO- http://hello-service.myapp:9000/`{{execute T1}}
 
 `wget -qO- http://hello-service.myapp.svc.cluster.local:9000/`{{execute T1}}
+
+`kubectl delete -f service.yaml -f deployment.yaml`{{execute T1}}
