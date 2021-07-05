@@ -16,24 +16,13 @@
         },
         "finish": {
             "text": "finish.md"
-        },
-        "assets": {
-            "host01": [
-                {"file": "pod.yaml", "target": "/root/"},
-                {"file": "replicaset.yaml", "target": "/root/"},
-                {"file": "deployment.yaml", "target": "/root/"},
-                {"file": "service.yaml", "target": "/root/"},
-                {"file": "deployment-v2.yaml", "target": "/root/"},
-                {"file": "deployment-probes.yaml", "target": "/root/"}
-            ]
         }
     },
     "files": [
-        "pod.yaml",
-        "replicaset.yaml"
+        "pod.yaml"
     ],
     "environment": {
-        "uilayout": "terminal",
+        "uilayout": "editor-terminal",
         "uisettings": "yaml",
         "showide": true,
         "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n",
