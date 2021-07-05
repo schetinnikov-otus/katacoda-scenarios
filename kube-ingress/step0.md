@@ -72,9 +72,18 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 helm install nginx ingress-nginx/ingress-nginx
 ```{{execute T1}}
 
+`kubectl get service nginx-ingress-nginx-controller -o json | jq` {{execute T1}}
+
 
 `NGINX_CLUSTER_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
 
 `curl $NGINX_CLUSTER_IP/myapp/`{{execute T1}}
 
 `curl $NGINX_CLUSTER_IP/myapp/version`{{execute T1}}
+
+
+`NGINX_EXTERNAL_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
+
+`curl $NGINX_EXTERNAL_IP/myapp/version`{{execute T1}}
+
+`curl $NGINX_EXTERNAL_IP/myapp/`{{execute T1}}
