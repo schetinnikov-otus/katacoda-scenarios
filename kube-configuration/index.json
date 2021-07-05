@@ -20,7 +20,9 @@
     },
     "files": [
         "deployment.yaml",
-        "service.yaml"
+        "service.yaml",
+        "config.yaml",
+        "special-config.yaml"
     ],
     "environment": {
         "uilayout": "editor-terminal",
