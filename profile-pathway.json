@@ -34,6 +34,11 @@
             "title": "Ingress demo",
             "description": "Ingress demo",
             "id": "kube-ingress"
+        },
+        {
+            "title": "Configuration demo",
+            "description": "Configuration demo",
+            "id": "kube-configuration"
         }
     ]
   }
