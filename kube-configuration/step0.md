@@ -213,11 +213,11 @@ spec:
 
 Создадим ConfigMap дополнительно: 
 
-<pre class="file" data-filename="./special-config.yaml" data-target="replace">
+<pre class="file" data-filename="./mountconfig.yaml" data-target="replace">
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: special-config
+  name: mount-config
 data:
   test.json: |
     {
@@ -232,7 +232,7 @@ data:
 
 Применим манифест:
 
-`kubectl apply -f special-config.yaml`{{execute T1}}
+`kubectl apply -f mountconfig.yaml`{{execute T1}}
 
 И теперь уже монтируем внутрь пода:
 
@@ -259,12 +259,12 @@ spec:
           ports:
             - containerPort: 8000
           volumeMounts:
-            - name: special-config
+            - name: mount-config
               mountPath: /tmp/config
       volumes:
-        - name: special-config
+        - name: mount-config
           configMap:
-            name: special-config
+            name: mount-config
 </pre>
 
 Применяем манифест:

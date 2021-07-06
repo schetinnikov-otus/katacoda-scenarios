@@ -22,7 +22,7 @@
         "deployment.yaml",
         "service.yaml",
         "config.yaml",
-        "special-config.yaml"
+        "mountconfig.yaml"
     ],
     "environment": {
         "uilayout": "editor-terminal",
