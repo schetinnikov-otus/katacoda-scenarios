@@ -19,14 +19,15 @@
         },
         "assets": {
             "host01": [
-                {"file": "hello-service.json", "target": "/root", "chmod": "+x"}
+                {"file": "hello-service.json", "target": "/root", "chmod": "+x"},
+                {"file": "launch_k8s.sh", "target": "/root", "chmod": "+x"},
+                {"file": "proxy_api_server_to_localhost_8080.sh", "target": "/root", "chmod": "+x"}
             ]
         }
     },
     "environment": {
         "uilayout": "terminal",
         "uisettings": "yaml",
-        "showide": true,
         "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n",
         "uimessage2": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n"
     },

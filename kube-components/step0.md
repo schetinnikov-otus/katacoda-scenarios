@@ -19,20 +19,22 @@
 Убедиться в этом мы можем, запуском команды 
 
 на управляющей ноде
-`ps -ef | grep kubelet`{{execute T1}}
+`ps -ef | grep /usr/bin/kubelet`{{execute T1}}
 
 на рабочей ноде
-`ps -ef | grep kubelet`{{execute T2}}
+`ps -ef | grep /usr/bin/kubelet`{{execute T2}}
 
 Kube-proxy и управляющие компоненты Kubernetes запущены в контейнерном окружении и увидеть их можно с помощью команды docker ps 
 
 на управляющией ноде
 
-`docker ps` {{execute T1}}
+`docker ps`{{execute T1}}
 
 на рабочей ноде
 
-`docker ps` {{execute T2}}
+`docker ps`{{execute T2}}
+
+`docker ps | grep -v pause`{{execute T1}}
 
 Поскольку эта инсталляция Kubernetes не является минимальной, помимо базовых компонентов, про которые мы с вами говорили, тут присутствую и другие, дополнительные компоненты. 
 
@@ -60,14 +62,16 @@ API-Server
 
 Вся эта информация хранится в хранилище etcd. Мы можем зайти etcd c помощью команды docker exec и посмотреть эту конфигурацию. Etcd является key-value хранилищем и, зная ключ, можно получить значение с помощью утилиты etcdctl. Информация о ноде controlplane хранится в ключе "/registry/minions/controlplane". 
 
-`docker ps | grep etcd` {{execute T1}}
+`docker ps | grep etcd`{{execute T1}}
 
-docker exec -it 7c89a5881115 etcdctl get /registry/minions/controlplane  --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key
+`ETCD_DOCKER_ID=$(docker ps | grep -v pause | grep etcd | awk '{print$1}')`{{execute T1}}
+
+`docker exec -it $ETCD_DOCKER_ID etcdctl get /registry/minions/controlplane  --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
 
 
 Также с помощью этой утилиты можем посмотреть, какие еще есть ключи. Их может быть довольно много, поэтому ограничимся 100 записями.
 
-docker exec -it 7c89a5881115 etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key
+`docker exec -it $ETCD_DOCKER_ID etcdctl get / --prefix --keys-only --limit=10 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
 
 Через API-Server пользователи кластера (утилиты, человек) или внутренние компоненты кластера получают и обновляют конфигурацию и статус кластера, который хранится, в etcd, а также подписываются на изменения. 
 
@@ -75,7 +79,7 @@ docker exec -it 7c89a5881115 etcdctl get / --prefix --keys-only --limit=10 --cac
 
 Для того, чтобы наблюдать, как работают компоненты, давайте с вами подпишемся на события, относящиеся к нашему экземпляру сервиса с помощью такой команды в соседнем терминале:
 
-`curl -s 127.0.0.1:8080/api/v1/events?watch=1  | jq '{message: .object.message, component: .object.source.component}' | jq 'select(.message | index("nginx"))'`{{execute T4}}
+`curl -s 127.0.0.1:8080/api/v1/events?watch=1  | jq '{message: .object.message, component: .object.source.component}' | jq 'select(.message | index("hello"))'`{{execute T4}}
 
 команда будет висеть, и как только будут появлятся события о нашем сервисе, они здесь будут появлятся. 
 
@@ -88,7 +92,10 @@ docker exec -it 7c89a5881115 etcdctl get / --prefix --keys-only --limit=10 --cac
 
 В событиях мы с вами можем увидеть события от scheduler-а и kubelet-a. 
 
-
 Также можем с вами увидеть, что на рабочей ноде наш сервис был запущен:
 
-`docker ps | grep nginx`{{execute T2}}
+`docker ps | grep -v pause | grep hello`{{execute T2}}
+
+
+А вот на управлюящей ноде сервиса, конечно, не будет
+`docker ps | grep -v pause | grep hello`{{execute T1}}
