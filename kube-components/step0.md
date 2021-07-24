@@ -1,6 +1,6 @@
 Сначала запустим кластер Kubernetes. Для этого нужно дождаться выполнения команды:
 
-`launch.sh`{{execute}}
+`./launch_k8s.sh`{{execute}}
 
 Но и это, к сожалению, еще не все. Также мы должны дождаться пока ноды кластера перейдут в статус Ready. Статус можно посмотреть командой:
 
@@ -50,6 +50,8 @@ API-Server
 
 `kubectl proxy --port=8080`{{execute T3}}
 
+`./proxy_api_server_to_localhost_8080.sh`{{execute T3}}
+
 (если терминал не был до этого открыт, то команду нужно будет нажать 2 раза - первый раз будет открыт терминал, а во второй выполнится уже команда)
 
 Теперь обращаясь по локальному порту 8080, мы можем совершать запросы к API Server-у.
@@ -61,8 +63,6 @@ API-Server
 В ответ мы получим довольно большой json с информацией о ноде.
 
 Вся эта информация хранится в хранилище etcd. Мы можем зайти etcd c помощью команды docker exec и посмотреть эту конфигурацию. Etcd является key-value хранилищем и, зная ключ, можно получить значение с помощью утилиты etcdctl. Информация о ноде controlplane хранится в ключе "/registry/minions/controlplane". 
-
-`docker ps | grep etcd`{{execute T1}}
 
 `ETCD_DOCKER_ID=$(docker ps | grep -v pause | grep etcd | awk '{print$1}')`{{execute T1}}
 
@@ -79,7 +79,8 @@ API-Server
 
 Для того, чтобы наблюдать, как работают компоненты, давайте с вами подпишемся на события, относящиеся к нашему экземпляру сервиса с помощью такой команды в соседнем терминале:
 
-`curl -s 127.0.0.1:8080/api/v1/events?watch=1  | jq '{message: .object.message, component: .object.source.component}' | jq 'select(.message | index("hello"))'`{{execute T4}}
+
+`while true; do clear ; curl -s 127.0.0.1:8080/api/v1/events  | jq '.items[] | {message: .message, component: .source.component} | select(.message | index("hello"))' ; sleep 3; done`{{execute T4}}
 
 команда будет висеть, и как только будут появлятся события о нашем сервисе, они здесь будут появлятся. 
 
