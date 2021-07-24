@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl proxy --port=8080 &
+kubectl proxy --port=8080
