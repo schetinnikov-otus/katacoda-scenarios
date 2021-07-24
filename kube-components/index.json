@@ -1,0 +1,36 @@
+{
+    "pathwayTitle": "Kubernetes",
+    "title": "Kubernetes",
+    "description": "Kubernetes",
+    "difficulty": "beginner",
+    "time": "10 minutes",
+    "details": {
+        "steps": [
+            {
+                "title": "Смотрим основные компоненты Kubernetes",
+                "text": "step0.md"
+            }
+        ],
+        "intro": {
+            "text": "intro.md"
+        },
+        "finish": {
+            "text": "finish.md"
+        },
+        "assets": {
+            "host01": [
+                {"file": "hello-service.json", "target": "/root", "chmod": "+x"}
+            ]
+        }
+    },
+    "environment": {
+        "uilayout": "terminal",
+        "uisettings": "yaml",
+        "showide": true,
+        "uimessage1": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n",
+        "uimessage2": "\u001b[32mYour Interactive Bash Terminal.\u001b[m\r\n"
+    },
+    "backend": {
+        "imageid": "kubernetes-cluster-running:1.18"
+    }
+}

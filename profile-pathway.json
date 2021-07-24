@@ -16,6 +16,11 @@
             "id": "kube-pod"
         },
         {
+            "title": "Kube components",
+            "description": "Kube components",
+            "id": "kube-components"
+        },
+        {
             "title": "Deployment demo",
             "description": "Deployment demo",
             "id": "kube-deployment"
