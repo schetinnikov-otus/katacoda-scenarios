@@ -1,5 +1,3 @@
-## Создание деплоймента
-
 Создадим **deployment.yaml** файл с манифестом **Kubernetes**: 
 
 <pre class="file" data-filename="./deployment.yaml" data-target="replace">
@@ -59,5 +57,3 @@ hello-deployment   2/2     2            2           24m
 ```
 Replicas:           2 desired | 2 updated | 2 total | 2 available | 0 unavailable
 ```
-
-

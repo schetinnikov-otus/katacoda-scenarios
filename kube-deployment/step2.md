@@ -1,6 +1,4 @@
-## Масштабирование деплоймента
-
-Давайте поменяем количество реплик в манифесте
+Давайте поменяем количество реплик в манифесте:
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="  replicas: 2">
   replicas: 3</pre>
@@ -13,11 +11,9 @@
 
 ## Масштабирование деплоймента с помощью kubectl scale 
 
-Также мы можем масштабировать деплоймент с помощью императивной команды kubectl scale.
+Также мы можем масштабировать деплоймент с помощью императивной команды **kubectl scale**.
 
-Например, 
-
-`kubectl scale deploy/hello-deployment --replicas=2`{{execute T1}}
+Например, `kubectl scale deploy/hello-deployment --replicas=2`{{execute T1}}
 
 Во второй вкладке можем наблюдать за тем, как сначала удаляется пода:
 
