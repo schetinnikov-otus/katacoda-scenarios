@@ -7,8 +7,28 @@
     "details": {
         "steps": [
             {
-                "title": "Создаем и работаем с сущностью Service",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Создание сервиса",
+                "text": "step1.md"
+            },
+            {
+                "title": "Тип сервиса ClusterIP",
+                "text": "step2.md"
+            },
+            {
+                "title": "Тип сервиса NodePort",
+                "text": "step3.md"
+            },
+            {
+                "title": "Тип сервиса LoadBalancer",
+                "text": "step4.md"
+            },
+            {
+                "title": "Обнаружение сервисов",
+                "text": "step5.md"
             }
         ],
         "intro": {
@@ -16,6 +36,11 @@
         },
         "finish": {
             "text": "finish.md"
+        },
+        "assets": {
+            "host01": [
+                {"file": "launch_k8s.sh", "target": "/root", "chmod": "+x"}
+            ]
         }
     },
     "files": [
