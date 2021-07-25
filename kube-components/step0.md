@@ -14,11 +14,11 @@
 
 на управляющей ноде:
 
-`ps -ef | grep /usr/bin/kubelet`{{execute T1}}
+`ps -ef | grep /usr/bin/kubelet`{{execute clear T1}}
 
 на рабочей ноде:
 
-`ps -ef | grep /usr/bin/kubelet`{{execute T2}}
+`ps -ef | grep /usr/bin/kubelet`{{execute clear T2}}
 
 Kube-proxy и управляющие компоненты Kubernetes запущены в контейнерном окружении и увидеть их можно с помощью команды docker ps 
 
