@@ -16,7 +16,7 @@
 
 `ps -ef | grep /usr/bin/kubelet`{{execute T1}}
 
-`ps -ef | grep /usr/bin/kubelet`{{execute clear}}
+`ps -ef | grep /usr/bin/kubelet`{{clear}}
 
 на рабочей ноде:
 
