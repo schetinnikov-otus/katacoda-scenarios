@@ -7,8 +7,28 @@
     "details": {
         "steps": [
             {
-                "title": "Создаем и запускаем deployment",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Создание деплоймента",
+                "text": "step1.md"
+            },
+            {
+                "title": "Масштабирование деплоймента",
+                "text": "step2.md"
+            },
+            {
+                "title": "Удаление пода деплоймента",
+                "text": "step3.md"
+            },
+            {
+                "title": "Обновление деплоймента",
+                "text": "step4.md"
+            },
+            {
+                "title": "Удаление деплоймента",
+                "text": "step5.md"
             }
         ],
         "intro": {
