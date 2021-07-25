@@ -66,11 +66,27 @@ spec:
 
 Дождемся, пока у пода не станет статус **Running**.
 
+```
+NAME         READY   STATUS    RESTARTS   AGE
+hello-demo   1/1     Running   0          35s
+```
+
 ## Логи
 
 После этого можно посмотреть логи контейнера внутри пода 
 
 `kubectl logs hello-demo`{{execute T1}}
+
+И увидим логи старта приложения:
+```
+controlplane $ kubectl logs hello-demo
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:8000/ (Press CTRL+C to quit)
+```
 
 ## Исполнение команд в контексте контейнеров пода
 
@@ -106,13 +122,25 @@ spec:
 
 В результате выполнение **curl** должен вернуть строку `"Hello world from hello-demo!"`
 
+```
+controlplane $ curl http://$POD_IP:8000/
+Hello world from hello-demo!
+```
+
 `curl http://$POD_IP:8000/version`{{execute}}
 
 В результате выполнение **curl** должен вернуть строку `{"version": "1"}`
 
-После этого можно посмотреть логи контейнера внутри пода, и увидим там логи запросов: 
+После этого можно посмотреть логи контейнера внутри пода
 
 `kubectl logs hello-demo`{{execute T1}}
+
+и увидим там логи запросов: 
+
+```
+172.17.0.21 - - [25/Jul/2021 17:54:38] "GET / HTTP/1.1" 200 -
+172.17.0.21 - - [25/Jul/2021 17:55:05] "GET /version HTTP/1.1" 200 -
+```
 
 ## Удаление пода
 
