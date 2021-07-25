@@ -13,6 +13,10 @@
             {
                 "title": "Объекты и ресурсы Kubernetes",
                 "text": "step1.md"
+            },
+            {
+                "title": "Kubectl",
+                "text": "step2.md"
             }
         ],
         "intro": {
