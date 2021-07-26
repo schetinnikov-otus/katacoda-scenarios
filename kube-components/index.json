@@ -7,8 +7,20 @@
     "details": {
         "steps": [
             {
-                "title": "Основные компоненты Kubernetes",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Основные компоненты Kubernetes",
+                "text": "step0-1.md"
+            },
+            {
+                "title": "API Server",
+                "text": "step0-2.md"
+            },
+            {
+                "title": "Запускаем рабочую нагрузку",
+                "text": "step0-3.md"
             },
             {
                 "title": "Объекты и ресурсы Kubernetes",
