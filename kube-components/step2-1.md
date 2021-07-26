@@ -54,3 +54,4 @@
 
 `kubectl get no,ns`{{execute T1}}
 
+`clear`{{execute T1}} `clear`{{execute T2}}

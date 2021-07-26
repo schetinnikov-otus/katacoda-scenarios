@@ -32,3 +32,4 @@ A команды `kubectl get service -n default`{{execute T1}} и `kubectl get 
 
 `kubectl config set-context --current --namespace=myapp`{{execute}}
 
+`clear`{{execute T1}} `clear`{{execute T2}}

@@ -5,3 +5,5 @@
 Проверить, настроен ли **kubectl**, можно с помощью команды: 
 
 `kubectl cluster-info`{{execute T1}}
+
+`clear`{{execute T1}} 

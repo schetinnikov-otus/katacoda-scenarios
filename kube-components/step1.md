@@ -18,3 +18,4 @@
 
 `docker exec -it $ETCD_DOCKER_ID etcdctl get /registry/pods/default/hello-demo  --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
 
+`clear`{{execute T1}} `clear`{{execute T2}}
