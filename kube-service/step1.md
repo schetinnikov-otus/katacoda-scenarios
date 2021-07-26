@@ -46,11 +46,41 @@ spec:
 
 Во втором терминале можем наблюдать за тем, как создаются поды. 
 
+NAME                                   READY   STATUS              RESTARTS   AGE
+pod/hello-deployment-d67cff5cc-c7hpw   0/1     ContainerCreating   0          7s
+pod/hello-deployment-d67cff5cc-q6xcw   0/1     ContainerCreating   0          7s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-deployment   0/2     2            0           7s
+
+NAME                    TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+service/hello-service   ClusterIP   10.108.237.251   <none>        9000/TCP   7s
+
 Дождемся, пока деплоймент раскатится - т.е. когда все поды станут в статусе **Running**
+
+NAME                                   READY   STATUS    RESTARTS   AGE
+pod/hello-deployment-d67cff5cc-c7hpw   1/1     Running   0          67s
+pod/hello-deployment-d67cff5cc-q6xcw   1/1     Running   0          67s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/hello-deployment   2/2     2            2           67s
 
 Посмотреть, состояние сервиса можно с помощью команды: 
 
 `kubectl describe service hello-service`{{execute T1}}
+
+controlplane $ kubectl describe service hello-service
+Name:              hello-service
+Namespace:         myapp
+Labels:            <none>
+Annotations:       Selector:  app=hello-demo
+Type:              ClusterIP
+IP:                10.108.237.251
+Port:              <unset>  9000/TCP
+TargetPort:        8000/TCP
+Endpoints:         10.244.1.3:8000,10.244.1.4:8000
+Session Affinity:  None
+Events:            <none>
 
 Из интересного, можно увидеть список конкретных **ip** подов, на которые будет направляться трафик в поле **Endpoints**.
 
@@ -67,12 +97,49 @@ spec:
 
 `kubectl describe service hello-service`{{execute T1}}
 
+Name:              hello-service
+Namespace:         myapp
+Labels:            <none>
+Annotations:       Selector:  app=hello-demo
+Type:              ClusterIP
+IP:                10.108.237.251
+Port:              <unset>  9000/TCP
+TargetPort:        8000/TCP
+Endpoints:         10.244.1.3:8000,10.244.1.4:8000,10.244.1.5:8000
+Session Affinity:  None
+Events:            <none>
+
 И он действительно подхватывается.
 
 Поскольку сервис реализуется с помощью правил маршрутизации трафика на iptables, то мы можем посмотреть, какие правила прописаны для нашего сервиса:
 
 `iptables-save | grep hello-service`{{execute T1}}
 
+-A KUBE-SEP-IR7NZTMQJJ4DUDF4 -s 10.244.1.5/32 -m comment --comment "myapp/hello-service:" -j KUBE-MARK-MASQ
+-A KUBE-SEP-IR7NZTMQJJ4DUDF4 -p tcp -m comment --comment "myapp/hello-service:" -m tcp -j DNAT --to-destination 10.244.1.5:8000
+-A KUBE-SEP-U4C2XSUEI4EBKBSC -s 10.244.1.3/32 -m comment --comment "myapp/hello-service:" -j KUBE-MARK-MASQ
+-A KUBE-SEP-U4C2XSUEI4EBKBSC -p tcp -m comment --comment "myapp/hello-service:" -m tcp -j DNAT --to-destination 10.244.1.3:8000
+-A KUBE-SEP-VFLPNOIMHIWUJ3TQ -s 10.244.1.4/32 -m comment --comment "myapp/hello-service:" -j KUBE-MARK-MASQ
+-A KUBE-SEP-VFLPNOIMHIWUJ3TQ -p tcp -m comment --comment "myapp/hello-service:" -m tcp -j DNAT --to-destination 10.244.1.4:8000
+-A KUBE-SERVICES ! -s 10.244.0.0/16 -d 10.108.237.251/32 -p tcp -m comment --comment "myapp/hello-service: cluster IP" -m tcp --dport 9000 -j KUBE-MARK-MASQ
+-A KUBE-SERVICES -d 10.108.237.251/32 -p tcp -m comment --comment "myapp/hello-service: cluster IP" -m tcp --dport 9000 -j KUBE-SVC-UXDM6DTBGPPHEIIP
+-A KUBE-SVC-UXDM6DTBGPPHEIIP -m comment --comment "myapp/hello-service:" -m statistic --mode random --probability 0.33333333349 -j KUBE-SEP-U4C2XSUEI4EBKBSC
+-A KUBE-SVC-UXDM6DTBGPPHEIIP -m comment --comment "myapp/hello-service:" -m statistic --mode random --probability 0.50000000000 -j KUBE-SEP-VFLPNOIMHIWUJ3TQ
+
+
 Мы также могли создать сервис, используя императивную команду **kubectl expose deployment**:
 
 `kubectl expose deployment hello-deployment --type=ClusterIP --name=hello-service-2`{{execute T1}}
+
+controlplane $  kubectl describe svc hello-service-2Name:              hello-service-2
+Namespace:         myapp
+Labels:            <none>
+Annotations:       <none>
+Selector:          app=hello-demo
+Type:              ClusterIP
+IP:                10.98.145.31
+Port:              <unset>  8000/TCP
+TargetPort:        8000/TCP
+Endpoints:         10.244.1.3:8000,10.244.1.4:8000,10.244.1.5:8000
+Session Affinity:  None
+Events:            <none>

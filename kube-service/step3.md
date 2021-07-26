@@ -9,6 +9,9 @@
 
 Давайте посмотрим на полные данные сервиса:
 
+NAME                      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+service/hello-service     NodePort    10.108.237.251   <none>        9000:32296/TCP   5m12s
+
 `kubectl get service hello-service -o json | jq`{{execute T1}}
 
 Можем оттуда достать NodePort
@@ -21,4 +24,10 @@
 
 `curl http://node01:$NODE_PORT/`{{execute T1}}
 
+curl http://node01:$NODE_PORT/
+Hello world from hello-deployment-d67cff5cc-q6xcw!
+
 `curl http://controlplane:$NODE_PORT/`{{execute T1}}
+
+curl http://controlplane:$NODE_PORT/
+Hello world from hello-deployment-d67cff5cc-c7hpw!

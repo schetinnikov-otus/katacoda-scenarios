@@ -66,7 +66,7 @@
 Вся эта информация хранится в хранилище **etcd**. Мы можем зайти **etcd** c помощью команды `docker exec` и посмотреть эту конфигурацию. **Etcd** является key-value хранилищем и, зная ключ, можно получить значение с помощью утилиты **etcdctl**. Информация о ноде **controlplane** хранится в ключе `/registry/minions/controlplane`. 
 
 Сохраним id контейнера, в котором запущен **etcd**, в переменную окружения `ETCD_DOCKER_ID`:
-`ETCD_DOCKER_ID=$(docker ps | grep -v pause | grep **etcd** | awk '{print$1}')`{{execute T1}}
+`ETCD_DOCKER_ID=$(docker ps | grep -v pause | grep etcd | awk '{print$1}')`{{execute T1}}
 
 И сделаем запрос напрямую в **etcd**:
 `docker exec -it $ETCD_DOCKER_ID etcdctl get /registry/minions/controlplane  --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
