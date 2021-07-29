@@ -29,15 +29,17 @@
 
 Агент **Kube-proxy** запщуен в контейнерном окружении. 
 
-Убедится, что он запущен можно с помощью команды `docker ps | grep kube-proxy`. 
+Убедится, что он запущен можно с помощью команды `docker ps | grep -v pause |grep kube-proxy`. 
+
+> с помощью команды `grep -v pause` из списка удаляются так называемые pause контейнеры, которые Kubernetes создает для своих технических нужд 
 
 Выполним команду на управляющией ноде:
 
-`docker ps | grep kube-proxy`{{execute T1}}
+`docker ps | grep -v pause | grep kube-proxy`{{execute T1}}
 
 и на рабочей: 
 
-`docker ps | grep kube-proxy`{{execute T2}}
+`docker ps | grep -v pause | grep kube-proxy`{{execute T2}}
 
 и убедимся, что **Kube-proxy** запущен на всех нодах кластера. 
 
@@ -52,7 +54,7 @@
 
 И запустим ту же команду на рабочей ноде:
 
-`clear`{{execute T1}}
+`clear`{{execute T2}}
 `docker ps | grep -v pause | grep -E 'etcd|apiserver|scheduler|kube-controller-manager'`{{execute T2}}
 
 Видим,  что управлящие компоненты запущены только на управляющей ноде.
