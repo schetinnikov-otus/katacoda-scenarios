@@ -22,10 +22,14 @@
 И сделаем запрос напрямую в **etcd**:
 `docker exec -it $ETCD_DOCKER_ID etcdctl get /registry/minions/controlplane  --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
 
-Также с помощью этой утилиты можем посмотреть, какие еще есть ключи. Их может быть довольно много, поэтому ограничимся 100 записями.
+В ответе получим ту же самую информацию что и отдал **API Server**.
 
-`docker exec -it $ETCD_DOCKER_ID etcdctl get / --prefix --keys-only --limit=100 --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
+Также с помощью этой утилиты можем посмотреть, какие еще есть ключи. 
 
-Через **API Server** пользователи кластера (утилиты или человек) и внутренние компоненты кластера получают и обновляют конфигурацию и статус кластера, который хранится, в **etcd**, а также подписываются на изменения. 
+`docker exec -it $ETCD_DOCKER_ID etcdctl get / --prefix --keys-only --cacert /etc/kubernetes/pki/etcd/ca.crt --cert /etc/kubernetes/pki/etcd/peer.crt  --key /etc/kubernetes/pki/etcd/peer.key`{{execute T1}}
+
+Как видим ключей довольно много, каждый хранит какой-то отдельный аспект конфигурации кластера или его состояния.
+
+Таким образом, через **API Server** пользователи кластера (утилиты или человек) и внутренние компоненты кластера получают и обновляют конфигурацию и статус кластера, который хранится, в **etcd**, а также подписываются на изменения. 
 
 `clear`{{execute T1}} `clear`{{execute T2}}
