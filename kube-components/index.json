@@ -23,24 +23,12 @@
                 "text": "step1.md"
             },
             {
-                "title": "Удаление ресурса Kubernetes",
-                "text": "step1-1.md"
-            },
-            {
                 "title": "Kubectl",
                 "text": "step2.md"
             },
             {
-                "title": "Получение ресурсов Kubernetes",
-                "text": "step2-1.md"
-            },
-            {
-                "title": "Пространства имен в Kubectl",
-                "text": "step2-2.md"
-            },
-            {
                 "title": "Создание рабочей нагрузки через Kubectl",
-                "text": "step2-3.md"
+                "text": "step3.md"
             }
         ],
         "intro": {
