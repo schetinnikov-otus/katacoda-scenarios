@@ -38,6 +38,7 @@ hello-deployment-d67cff5cc-qbghj   1/1     Running   0          12s
 `kubectl label pod $POD_NAME app=hello-demo`{{execute T1}}
 
 Во второй вкладке можем наблюдать за тем, деплоймент удалил один из подов.
+
 ```
 NAME                               READY   STATUS        RESTARTS   AGE
 hello-deployment-d67cff5cc-2vpkg   1/1     Running       0          2m54s

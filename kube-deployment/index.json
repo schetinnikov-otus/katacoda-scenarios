@@ -3,7 +3,7 @@
     "title": "Kubernetes",
     "description": "Kubernetes",
     "difficulty": "beginner",
-    "time": "10 minutes",
+    "time": "30 minutes",
     "details": {
         "steps": [
             {
@@ -19,16 +19,8 @@
                 "text": "step2.md"
             },
             {
-                "title": "Удаление пода деплоймента",
-                "text": "step3.md"
-            },
-            {
                 "title": "Обновление деплоймента",
                 "text": "step4.md"
-            },
-            {
-                "title": "Удаление деплоймента",
-                "text": "step5.md"
             }
         ],
         "intro": {

@@ -1,6 +1,6 @@
 ## Стратегия обновления RollingUpdate
 
-Теперь давайте посмотрим, как работают стратегии обновления. В текущем манифесте используется **RollingUpdate**. Давайте обновим версию в манифесте на v2
+Теперь давайте посмотрим, как работают *стратегии обновления*. В текущем манифесте используется **RollingUpdate**. Давайте обновим версию в манифесте на **v2**
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v1">
           image: schetinnikov/hello-app:v2</pre>
@@ -9,7 +9,7 @@
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
-Во второй вкладке можем наблюдать за тем, как одновременно создаются и удаляются поды.
+Во второй вкладке можем наблюдать за тем, как одновременно создаются и удаляются *поды*.
 
 ```
 
@@ -22,7 +22,7 @@ hello-deployment-d67cff5cc-hrfh8    1/1     Terminating   0          7m34s
 hello-deployment-d67cff5cc-hsf6g    1/1     Terminating   0          7m34s
 ```
 
-Также мы можем откатить деплоймент. Для этого достаточно вернуть версию назад.
+Также мы можем откатить *деплоймент*. Для этого достаточно вернуть версию назад.
 
 <pre class="file" data-filename="./deployment.yaml" data-target="insert" data-marker="          image: schetinnikov/hello-app:v2">
           image: schetinnikov/hello-app:v1</pre>
@@ -31,7 +31,7 @@ hello-deployment-d67cff5cc-hsf6g    1/1     Terminating   0          7m34s
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
-Во второй вкладке можем наблюдать за тем, как одновременно создаются и удаляются поды, и деплоймент возвращается на место. 
+Во второй вкладке можем наблюдать за тем, как одновременно создаются и удаляются поды. 
 
 ```
 NAME                                READY   STATUS              RESTARTS   AGE
@@ -43,11 +43,11 @@ hello-deployment-d67cff5cc-swdqh    1/1     Running             0          5s
 hello-deployment-d67cff5cc-vbkl7    0/1     ContainerCreating   0          1s
 ```
 
-Дождемся пока деплоймент полностью откатится.
- 
+Дождемся пока *деплоймент* полностью откатится.
+
 ## Обновление деплоймента с помощью kubectl set image и kubectl rollout undo
 
-Мы также можем обновить версию деплоймента и откатить его с помощью императивных команд **kubectl**. 
+Мы также можем обновить версию *деплоймента* и откатить его с помощью *императивных* команд **kubectl**. 
 
 Для обновления на новую версию можно использовать **kubectl set image**:
 
@@ -75,7 +75,7 @@ hello-deployment-d67cff5cc-vbkl7    0/1     ContainerCreating   0          1s
 
 `kubectl apply -f deployment.yaml`{{execute T1}}
 
-Во второй вкладке можем наблюдать за тем, как одновременно сначала все поды находятся в статусе **Terminating**:
+Во второй вкладке можем наблюдать за тем, как одновременно сначала все *поды* находятся в статусе **Terminating**:
 ```
 NAME                                READY   STATUS        RESTARTS   AGE
 hello-deployment-6949477748-6w8g4   1/1     Terminating   0          6m39s
@@ -90,3 +90,12 @@ hello-deployment-d67cff5cc-5cq94   1/1     Running   0          5s
 hello-deployment-d67cff5cc-7p2cv   1/1     Running   0          5s
 hello-deployment-d67cff5cc-z54rr   1/1     Running   0          5s
 ```
+
+## Удаление деплоймента
+
+Теперь можем удалить *деплоймент*:
+
+`kubectl delete -f deployment.yaml`{{execute T1}}
+
+Вместе с удалением *деплоймента* будут удалены все *поды*.
+
