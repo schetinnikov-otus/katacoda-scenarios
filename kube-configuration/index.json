@@ -7,8 +7,20 @@
     "details": {
         "steps": [
             {
-                "title": "Работаем с конфигурацией приложений",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Переменные окружения",
+                "text": "step1.md"
+            },
+            {
+                "title": "Создание ConfigMap и Secret",
+                "text": "step2.md"
+            },
+            {
+                "title": "Использование ConfigMap и Secret",
+                "text": "step3.md"
             }
         ],
         "intro": {
@@ -21,7 +33,8 @@
     "files": [
         "deployment.yaml",
         "service.yaml",
-        "config.yaml",
+        "configmap.yaml",
+        "secret.yaml",
         "mountconfig.yaml"
     ],
     "environment": {
