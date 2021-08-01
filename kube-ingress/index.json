@@ -7,8 +7,12 @@
     "details": {
         "steps": [
             {
-                "title": "Создаем и работаем с сущностью Ingress",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Создаем и работаем с объектом Ingress",
+                "text": "step1.md"
             }
         ],
         "intro": {
@@ -16,7 +20,8 @@
         },
         "assets": {
             "host01": [
-                {"file": "nginx-ingress.yaml", "target": "/root", "chmod": "+x"}
+                {"file": "nginx-ingress.yaml", "target": "/root", "chmod": "+x"},
+                {"file": "launch_k8s.sh", "target": "/root", "chmod": "+x"}
             ]
         },
         "finish": {
