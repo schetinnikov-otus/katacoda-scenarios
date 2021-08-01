@@ -136,7 +136,7 @@ spec:
 
 Если мы с вами изменим **ConfigMap**, то через некоторое время изменения применятся и файлы внутри *пода* изменятся:
 
-<pre class="file" data-filename="./special-config.yaml" data-target="insert" data-marker="    foo=bar">
+<pre class="file" data-filename="./mountconfig.yaml" data-target="insert" data-marker="    foo=bar">
     foo=FOOBARBAZQUUX</pre>
 
 

@@ -34,18 +34,18 @@ kind: Secret
 metadata:
   name: hello-secret
 data:
-  DATABASE_URI: cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMvbXlhcHAK
+  DATABASE_URI: cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9teWFwcA==
 </pre>
 
 Насколько мы знаем данные в объекте **ConfigMap** хранятся как есть, а в **Secret**-е кодируются в **base64** . 
 
 Например, значение `DATABASE_URI` закодировано в **base64**.
 
-`echo 'cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMvbXlhcHAK' | base64 -d`{{execute T1}}
+`echo 'cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9teWFwcA==' | base64 -d`{{execute T1}}
 
 Когда создаем **Secret** с помощью манифестов, то кодировать нужно самостоятельно. Например, с помощью утилиты **base64**: 
 
-`echo -n 'postgresql+psycopg2://myuser:passwd@postgres.default.svc.cluster.local:5432/myapp' | base64`{{execute T1}}
+`echo -n 'postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp' | base64`{{execute T1}}
 
 Применим манифест **config.yaml**: 
 
@@ -119,11 +119,11 @@ data:
 
 Теперь с помощью команды `kubectl create configmap {имя конфигмапы} --from-file={путь до директории}`  мы  можем создать **ConfigMap**:
 
-`kubectl create configmap hello-configmap-from-file --from-file=hello-configmap-dir`
+`kubectl create configmap hello-configmap-from-file --from-file=hello-configmap-dir`{{execute T1}}
 
 И проверим, что **ConfigMap** создался правильно:
 
-`kubectl describe configmaps hello-config-literal`{{execute T1}}
+`kubectl describe configmaps hello-configmap-from-file`{{execute T1}}
 
 ## Создание Secret из файлов
 
@@ -139,7 +139,7 @@ data:
 
 Теперь с помощью команды `kubectl create secret generic {имя секрета} --from-file={путь до директории}`  мы можем создать секрет. 
 
-`kubectl create secret generic hello-secret-from-file --from-file=hello-secret-2`{{execute T1}}
+`kubectl create secret generic hello-secret-from-file --from-file=hello-secret-dir`{{execute T1}}
 
 Проверим, что данные закодированы:
 
@@ -149,10 +149,10 @@ data:
 
 И что совпадают с теми данными, что мы отправляли в команде:
 
-`kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}" | base64 -d` {{execute T1}}
+`kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}" | base64 -d`{{execute T1}}
 
 Теперь удалим **Secret** и **ConfigMap**, чтобы они нам не мешали:
 
 `kubectl delete secret hello-secret-from-file`{{execute T1}}
 
-`kubectl delete configmap hello-config-from-file`{{execute T1}}
+`kubectl delete configmap hello-configmap-from-file`{{execute T1}}

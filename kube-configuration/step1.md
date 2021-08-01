@@ -89,10 +89,11 @@ spec:
             - containerPort: 8000
           env:
             - name: DATABASE_URI
-              value: 'postgresql+psycopg2://myuser:passwd@postgres.default.svc.cluster.local:5432/myapp'
+              value: 'postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp'
             - name: GREETING
               value: 'Alloha'
 </pre>
+
 
 Давайте применим манифест
 
