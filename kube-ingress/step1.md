@@ -1,5 +1,3 @@
-
-
 ## Запуск приложения
 
 Создадим **deployment.yaml** файл с манифестом **Kubernetes**: 
@@ -44,7 +42,7 @@ spec:
   type: ClusterIP
 </pre>
 
-И в файле **ingress.yaml** манифест **ингресса**:
+И создадим файл **ingress.yaml**  :
 
 <pre class="file" data-filename="./ingress.yaml" data-target="replace">
 apiVersion: networking.k8s.io/v1beta1
@@ -75,7 +73,7 @@ spec:
 
 Поскольку у нас нет **ингресс-контроллера** встроенного, его необходимо поставить. 
 
-Ставить будем в системный **namespace** **kube-system** с помощью утилиты **helm**:
+Ставить будем в системный **namespace** `kube-system` с помощью утилиты **helm**:
 
 `helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx`{{execute T1}}
 
@@ -85,20 +83,21 @@ spec:
 
 `kubectl get service nginx-ingress-nginx-controller -o json -n kube-system | jq` {{execute T1}}
 
-`NGINX_CLUSTER_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
+`NGINX_CLUSTER_IP=$(kubectl get service nginx-ingress-nginx-controller -n kube-system -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
 
 ## Запросы к ингресс-контроллеру
 
 Можно делать запросы к **ингрес-контроллеру** и он будет маршрутизировать трафик в соответствии с правилами из **ингрессов**:
 
-`curl $NGINX_CLUSTER_IP/myapp/`{{execute T1}}
+Обратимся к **ингресс-контроллеру** по внешнему **IP** адресу. 
 
-`curl $NGINX_CLUSTER_IP/myapp/version`{{execute T1}}
-
-Также можно обратитьс по внешнему **IP** адресу:
+Сохраним значение внешнего **IP** в переменную окружения `NGINX_EXTERNAL_IP`.
 
 `NGINX_EXTERNAL_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
+
+Теперь можем сделать запросы с помощью команды **curl**:
 
 `curl $NGINX_EXTERNAL_IP/myapp/version`{{execute T1}}
 
 `curl $NGINX_EXTERNAL_IP/myapp/`{{execute T1}}
+

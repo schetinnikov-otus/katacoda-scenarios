@@ -49,6 +49,12 @@ spec:
 Во втором терминале можем наблюдать за тем, как создаются *поды*. 
 Дождемся, пока *деплоймент* раскатится - т.е. когда все *поды* окажутся в статусе **Running**
 
+```
+NAME                                    READY   STATUS    RESTARTS   AGE
+pod/hello-deployment-7d79b5c767-2v8th   1/1     Running   0          70s
+pod/hello-deployment-7d79b5c767-4hxll   1/1     Running   0          70s
+```
+
 ## Переменные окружения
 
 Мы используем версию приложения, которая по пути`/env` отдает свою конфигурацию, вместе с переменными окружения.
@@ -62,6 +68,15 @@ spec:
 Смотрим ответ приложения:
 
 `curl -s http://$CLUSTER_IP:9000/env | jq`{{execute T1}}
+
+```
+controlplane $ curl -s http://$CLUSTER_IP:9000/env | jq
+{
+  "DATABASE_URI": "",
+  "HOSTNAME": "hello-deployment-7d79b5c767-4hxll",
+  "GREETING": "Hello"
+}
+```
 
 Теперь изменим их, добавим секцию **env**  в спецификацию контейнера деплоймента. 
 
@@ -106,3 +121,11 @@ spec:
 
 `curl -s http://$CLUSTER_IP:9000/env | jq`{{execute T1}}
 
+```
+controlplane $ curl -s http://$CLUSTER_IP:9000/env | jq
+{
+  "HOSTNAME": "hello-deployment-9797f8f6d-nnzcm",
+  "DATABASE_URI": "postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp",
+  "GREETING": "Alloha"
+}
+```

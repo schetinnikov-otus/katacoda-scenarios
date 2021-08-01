@@ -21,9 +21,29 @@ data:
 
 `kubectl get cm hello-config`{{execute T1}}
 
+```
+controlplane $ kubectl get cm hello-config
+NAME           DATA   AGE
+hello-config   1      5s
+```
+
 Посмотреть значения параметров ConfigMap можно с помощью команды `kubectl describe`:
 
 `kubectl describe configmap hello-config`{{execute T1}}
+
+```
+controlplane $ kubectl describe configmap hello-config
+Name:         hello-config
+Namespace:    myapp
+Labels:       <none>
+Annotations:  
+Data
+====
+GREETING:
+----
+Privet
+Events:  <none>
+```
 
 ## Создание Secret из манифеста
 
@@ -43,9 +63,20 @@ data:
 
 `echo 'cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9teWFwcA==' | base64 -d`{{execute T1}}
 
+```
+controlplane $ echo 'cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9teWFwcA==' | base64 -d
+postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp
+```
+
 Когда создаем **Secret** с помощью манифестов, то кодировать нужно самостоятельно. Например, с помощью утилиты **base64**: 
 
 `echo -n 'postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp' | base64`{{execute T1}}
+
+```
+controlplane $ echo -n 'postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp' | base64
+cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNs
+dXN0ZXIubG9jYWw6NTQzMi9teWFwcA==
+```
 
 Применим манифест **config.yaml**: 
 
@@ -54,6 +85,12 @@ data:
 Получить **Secret** можно также как и любой объект:
 
 `kubectl get secret hello-secret`{{execute T1}}
+
+```
+controlplane $ kubectl get secret hello-secret
+NAME           TYPE     DATA   AGE
+hello-secret   Opaque   1      3s
+```
 
 В **Secret** данные не показываются, но если запросить в формате **yaml** или **json**, то там будет закодированная строка:
 
@@ -64,6 +101,12 @@ data:
 Чтобы получить значение конкретного параметра **Secret**-а из командной строки, можно воспользоваться параметром **jsonpath** и **base64**:
 
 `kubectl get secret hello-secret -o jsonpath="{.data.DATABASE_URI}" | base64 -d`{{execute T1}}
+
+```
+controlplane $ kubectl get secret hello-secret -o jsonpath="{.data.DATABASE_URI}" | base64 -d
+postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp
+controlplane $ 
+```
 
 ## Создание ConfigMap из командной строки
 
@@ -83,6 +126,24 @@ data:
 
 `kubectl describe configmap hello-config-literal`{{execute T1}}
 
+```
+controlplane $ kubectl describe configmap hello-config-literal
+Name:         hello-config-literal
+Namespace:    myapp
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+GREETING:
+----
+Preved
+GREETING2:
+----
+ALLOHA
+Events:  <none>
+```
+
 ## Создание Secret из командной строки
 
 Для **Secret** чуть по-другому выглядит команда, но очень похоже: `kubectl create secret generic {имя секрета} --from-literal={ключ1}={значение1} --from-literal={ключ2}={значение2} ...`
@@ -95,9 +156,21 @@ data:
 
 `kubectl get secret hello-secret-literal -o jsonpath="{.data.PASSWORD}"`{{execute T1}}
 
+```
+controlplane $ kubectl get secret hello-secret-literal -o jsonpath="{.data.PASSWORD}"
+U3VwZXJDb29sUGFzc3dvcmQy
+controlplane $ 
+```
+
 И что совпадают с теми данными, что мы отправляли в команде:
 
 `kubectl get secret hello-secret-literal -o jsonpath="{.data.PASSWORD}" | base64 -d`{{execute T1}}
+
+```
+controlplane $ kubectl get secret hello-secret-literal -o jsonpath="{.data.PASSWORD}"
+U3VwZXJDb29sUGFzc3dvcmQy
+controlplane $ 
+```
 
 Теперь удалим **Secret** и **ConfigMap**, чтобы они нам не мешали:
 
@@ -125,6 +198,27 @@ data:
 
 `kubectl describe configmaps hello-configmap-from-file`{{execute T1}}
 
+```
+controlplane $ kubectl describe configmaps hello-configmap-from-file
+Name:         hello-configmap-from-file
+Namespace:    myapp
+Labels:       <none>
+Annotations:  <none>
+
+Data
+====
+GREETING2:
+----
+ALLOHA
+
+GREETING:
+----
+Preved
+
+Events:  <none>
+controlplane $ 
+```
+
 ## Создание Secret из файлов
 
 Для **Secret**-ов это работает аналогично:
@@ -145,11 +239,26 @@ data:
 
 `kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}"`{{execute T1}}
 
+```
+controlplane $ kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}"U3VwZXJDb29sU3Ryb25nUGFzc3dvcmQKcontrolplane $ 
+```
+
 `kubectl get secret hello-secret-from-file -o jsonpath="{.data.DATABASE_URI}"`{{execute T1}}
+
+```
+kubectl get secret hello-secret-from-file -o jsonpath="{.data.DATABASE_URI}"
+cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNsdXN0ZXIubG9jYWw6NTQzMi9teWFwcAo=
+controlplane $
+```
 
 И что совпадают с теми данными, что мы отправляли в команде:
 
 `kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}" | base64 -d`{{execute T1}}
+
+```
+controlplane $ kubectl get secret hello-secret-from-file -o jsonpath="{.data.PASSWORD}" | base64 -d
+SuperCoolStrongPassword
+```
 
 Теперь удалим **Secret** и **ConfigMap**, чтобы они нам не мешали:
 

@@ -50,6 +50,14 @@ spec:
 
 `curl -s http://$CLUSTER_IP:9000/env | jq`{{execute T1}}
 
+```
+controlplane $ curl -s http://$CLUSTER_IP:9000/env | jq
+{
+  "DATABASE_URI": "postgresql+psycopg2://myuser:passwd@postgres.myapp.svc.cluster.local:5432/myapp",
+  "HOSTNAME": "hello-deployment-5bb48d8d4b-tt4jg",
+  "GREETING": "Privet"
+}
+```
 
 
 ## Монтирование ConfigMap внутрь пода 
@@ -130,9 +138,27 @@ spec:
 
 `ls /tmp/config`{{execute T3}}
 
+```
+root@hello-deployment-85fbc4cd8b-c5q7h:/usr/src/app# ls /tmp/config
+my.cfg  test.json
+```
+
+
 `cat /tmp/config/test.json`{{execute T3}}
+```
+root@hello-deployment-85fbc4cd8b-c5q7h:/usr/src/app# cat /tmp/config/test.json
+{
+   "status": "OK"
+}
+```
 
 `cat /tmp/config/my.cfg`{{execute T3}}
+```
+root@hello-deployment-85fbc4cd8b-c5q7h:/usr/src/app# cat /tmp/config/my.cfg
+foo=bar
+baz=quux
+```
+
 
 Если мы с вами изменим **ConfigMap**, то через некоторое время изменения применятся и файлы внутри *пода* изменятся:
 
@@ -147,3 +173,8 @@ spec:
 Смотрим изменения:
 
 `cat /tmp/config/my.cfg`{{execute T3}}
+```
+root@hello-deployment-85fbc4cd8b-c5q7h:/usr/src/app# cat /tmp/config/my.cfg
+foo=FOOBARBAZQUUX
+baz=quux
+```
