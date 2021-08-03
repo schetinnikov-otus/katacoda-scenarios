@@ -1,137 +1,62 @@
-## Запуск приложения
-
-Создадим **deployment.yaml** файл с манифестом **Kubernetes**: 
-
-<pre class="file" data-filename="./deployment.yaml" data-target="replace">
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-deployment
-spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: hello-demo
-  strategy:
-    type: RollingUpdate
-  template:
-    metadata:
-      labels:
-        app: hello-demo
-    spec:
-      containers:
-        - name: hello-demo
-          image: schetinnikov/hello-app:v1
-          ports:
-            - containerPort: 8000
-</pre>
-
-И файл **service.yaml** с манифестом *сервиса* 
-
-<pre class="file" data-filename="./service.yaml" data-target="replace">
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-service
-spec:
-  selector:
-    app: hello-demo
-  ports:
-    - port: 9000
-      targetPort: 8000
-  type: ClusterIP
-</pre>
-
-И создадим файл **ingress.yaml**  :
-
-<pre class="file" data-filename="./ingress.yaml" data-target="replace">
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hello-ingress
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-spec:
-  rules:
-  - http:
-      paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: hello-service
-              port:
-                number: 9000
-</pre>
-
-Давайте применим все манифесты
-
-`kubectl apply -f deployment.yaml -f service.yaml -f ingress.yaml`{{execute T1}}
-
-Во втором терминале можем наблюдать за тем, как создаются *поды*. 
-Дождемся, пока *деплоймент* раскатится - т.е. когда все *поды* станут в статусе **Running**
-
 ## Установка ингресс контроллера
 
 Поскольку у нас нет **ингресс-контроллера** встроенного, его необходимо поставить. 
 
 Ставить будем в системный **namespace** `kube-system` с помощью утилиты **helm**:
 
-`helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx`{{execute T1}}
+`helm repo add bitnami https://charts.bitnami.com/bitnami`{{execute T1}}
 
-`helm install nginx ingress-nginx/ingress-nginx -n kube-system`{{execute T1}}
+`helm install nginx bitnami/nginx-ingress-controller -n kube-system`{{execute T1}}
 
-**Ингресс-контроллер** в данном случае - это **nginx** и **контроллер**, который читает изменения сущности **Ingress**. **Nginx** внутри **Kubernetes** запущен, как обычное приложение, и для него также есть **Service**.  
+**Ингресс-контроллер** в данном случае - это **nginx** и **контроллер**, который читает изменения сущности **Ingress**. **Nginx** внутри **Kubernetes** запущен, как обычное приложение, и для него также есть **Service**. Тип сервиса LoadBalancer-а, т.е. доступ к nginx будет извне кластера по внешнему IP адресу.  
 
-`kubectl get service nginx-ingress-nginx-controller -o json -n kube-system | jq`{{execute T1}}
+Можно посмотреть на настройки этого сервиса:
+`kubectl describe svc nginx-nginx-ingress-controller -n kube-system`{{execute T1}}
 
-`NGINX_CLUSTER_IP=$(kubectl get service nginx-ingress-nginx-controller -n kube-system -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
+```
+controlplane $ kubectl describe svc nginx-nginx-ingress-controller -n kube-system
+Name:                     nginx-nginx-ingress-controller
+Namespace:                kube-system
+Labels:                   app.kubernetes.io/component=controller
+                          app.kubernetes.io/instance=nginx
+                          app.kubernetes.io/managed-by=Helm
+                          app.kubernetes.io/name=nginx-ingress-controller
+                          helm.sh/chart=nginx-ingress-controller-7.6.17
+Annotations:              <none>
+Selector:                 app.kubernetes.io/component=controller,app.kubernetes.io/instance=nginx,app.kubernetes.io/name=nginx-ingress-controller
+Type:                     LoadBalancer
+IP:                       10.104.204.210
+LoadBalancer Ingress:     172.17.0.8
+Port:                     http  80/TCP
+TargetPort:               http/TCP
+NodePort:                 http  30325/TCP
+Endpoints:                10.244.1.3:80
+Port:                     https  443/TCP
+TargetPort:               https/TCP
+NodePort:                 https  32595/TCP
+Endpoints:                10.244.1.3:443
+Session Affinity:         None
+External Traffic Policy:  Cluster
+```
 
-## Запросы к ингресс-контроллеру
-
-Можно делать запросы к **ингрес-контроллеру** и он будет маршрутизировать трафик в соответствии с правилами из **ингрессов**:
-
-Обратимся к **ингресс-контроллеру** по внешнему **IP** адресу. 
 
 Сохраним значение внешнего **IP** в переменную окружения `NGINX_EXTERNAL_IP`.
 
-`NGINX_EXTERNAL_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
+`NGINX_EXTERNAL_IP=$(kubectl get service nginx-nginx-ingress-controller -n kube-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
 
 Теперь можем сделать запросы с помощью команды **curl**:
 
-`curl $NGINX_EXTERNAL_IP/version`{{execute T1}}
-
 `curl $NGINX_EXTERNAL_IP/`{{execute T1}}
+```
+controlplane $ curl $NGINX_EXTERNAL_IP/
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+```
 
-## Меняем правила марутизация трафика
 
-<pre class="file" data-filename="./ingress.yaml" data-target="replace">
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: hello-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
-    kubernetes.io/ingress.class: "nginx"
-spec:
-  rules:
-  - host: hello.world
-    http:
-      paths:
-        - path: /myapp($|/)(.*)
-          pathType: Prefix
-          backend:
-            service:
-              name: hello-service
-              port:
-                number: 9000
-</pre>
-
-Давайте применим ингресс
-
-`kubectl apply -f ingress.yaml`{{execute T1}}
-
-`curl $NGINX_EXTERNAL_IP/myapp/version`{{execute T1}}
-
-`curl $NGINX_EXTERNAL_IP/myapp/`{{execute T1}}
 

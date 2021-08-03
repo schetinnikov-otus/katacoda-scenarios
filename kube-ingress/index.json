@@ -3,7 +3,7 @@
     "title": "Kubernetes",
     "description": "Kubernetes",
     "difficulty": "beginner",
-    "time": "10 minutes",
+    "time": "30 minutes",
     "details": {
         "steps": [
             {
@@ -11,8 +11,12 @@
                 "text": "step0.md"
             },
             {
-                "title": "Создаем и работаем с объектом Ingress",
+                "title": "Запускаем ингресс контроллер",
                 "text": "step1.md"
+            },
+            {
+                "title": "Создаем и работаем с объектом Ingress",
+                "text": "step2.md"
             }
         ],
         "intro": {
@@ -20,7 +24,6 @@
         },
         "assets": {
             "host01": [
-                {"file": "nginx-ingress.yaml", "target": "/root", "chmod": "+x"},
                 {"file": "launch_k8s.sh", "target": "/root", "chmod": "+x"}
             ]
         },
