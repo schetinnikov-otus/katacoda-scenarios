@@ -45,21 +45,23 @@ spec:
 И создадим файл **ingress.yaml**  :
 
 <pre class="file" data-filename="./ingress.yaml" data-target="replace">
-apiVersion: networking.k8s.io/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: hello-ingress
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   rules:
   - http:
       paths:
-        - path: /myapp($|/)(.*)
+        - path: /
+          pathType: Prefix
           backend:
-            serviceName: hello-service
-            servicePort: 9000
+            service:
+              name: hello-service
+              port:
+                number: 9000
 </pre>
 
 Давайте применим все манифесты
@@ -81,7 +83,7 @@ spec:
 
 **Ингресс-контроллер** в данном случае - это **nginx** и **контроллер**, который читает изменения сущности **Ingress**. **Nginx** внутри **Kubernetes** запущен, как обычное приложение, и для него также есть **Service**.  
 
-`kubectl get service nginx-ingress-nginx-controller -o json -n kube-system | jq` {{execute T1}}
+`kubectl get service nginx-ingress-nginx-controller -o json -n kube-system | jq`{{execute T1}}
 
 `NGINX_CLUSTER_IP=$(kubectl get service nginx-ingress-nginx-controller -n kube-system -o jsonpath="{.spec.clusterIP}")`{{execute T1}}
 
@@ -96,6 +98,38 @@ spec:
 `NGINX_EXTERNAL_IP=$(kubectl get service nginx-ingress-nginx-controller -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
 
 Теперь можем сделать запросы с помощью команды **curl**:
+
+`curl $NGINX_EXTERNAL_IP/version`{{execute T1}}
+
+`curl $NGINX_EXTERNAL_IP/`{{execute T1}}
+
+## Меняем правила марутизация трафика
+
+<pre class="file" data-filename="./ingress.yaml" data-target="replace">
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hello-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+  - host: hello.world
+    http:
+      paths:
+        - path: /myapp($|/)(.*)
+          pathType: Prefix
+          backend:
+            service:
+              name: hello-service
+              port:
+                number: 9000
+</pre>
+
+Давайте применим ингресс
+
+`kubectl apply -f ingress.yaml`{{execute T1}}
 
 `curl $NGINX_EXTERNAL_IP/myapp/version`{{execute T1}}
 
