@@ -21,6 +21,11 @@
         },
         "finish": {
             "text": "finish.md"
+        },
+        "assets": {
+            "host01": [
+                {"file": "launch_k8s.sh", "target": "/root", "chmod": "+x"}
+            ]
         }
     },
     "files": [

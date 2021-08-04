@@ -53,8 +53,6 @@ spec:
 
 Для этого перейдем в третий терминал.
 
-В бесконечном цикле начнем опрашивать наш сервис.
-
 Сначала сохраним в переменную окружения CLUSTER_IP внутренний IP cервиса:
 
 `CLUSTER_IP=$(kubectl get service hello-service -o jsonpath="{.spec.clusterIP}")`{{execute T3}}
