@@ -7,9 +7,14 @@
     "details": {
         "steps": [
             {
-                "title": "Создаем и работаем с настройками probes",
+                "title": "Запускаем кластер Kubernetes",
                 "text": "step0.md"
+            },
+            {
+                "title": "Запускаем приложение и работаем с проверками",
+                "text": "step1.md"
             }
+
         ],
         "intro": {
             "text": "intro.md"

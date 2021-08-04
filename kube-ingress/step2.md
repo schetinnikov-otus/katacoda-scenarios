@@ -1,5 +1,3 @@
-## Запуск приложения
-
 Создадим **deployment.yaml** файл с манифестом **Kubernetes**: 
 
 <pre class="file" data-filename="./deployment.yaml" data-target="replace">
@@ -84,11 +82,9 @@ spec:
 
 ## Меняем правила марутизация трафика
 
-Давайте поменяем ингресс так, чтобы запросы типа `/myapp/version` маршрутизировались на  локейшн `/version` в `hello-service` на `9000` порт. 
+Давайте поменяем правила маршрутизации так, чтобы все запросы к балансировщику на локейшен `/myapp/` проксировались  в `hello-service` на `9000` порт. Для того, чтобы это реализовать на стороне балансера нужно будет перезаписывать локейшн и "отрезать" `/myapp`. Сделать это можно с помощью директивы **rewrite-target** в **nginx**.  Но этой директивы нет объекте типа **Ingress**. Дополнительные настройки в **Ingress** можно передать с помощью *аннотаций*. Для директивы **rewrite-target** нужно использовать *аннотацию* `nginx.ingress.kubernetes.io/rewrite-target`. В нашем случае `/$2` означает: "заменить локейшн на 2-ую группу из регулярного выражения `/myapp($|/)(.*)` - т.е. фактически отрезать часть `/myapp($|/)`". Это то, что нам надо. 
 
-Для того, чтобы это реализовать на стороне балансера нужно будет перезаписывать локейшн и "отрезать" `/myapp`. Сделать это можно с помощью директивы **rewrite-target** в **nginx**.  Но этой директивы нет объекте типа **Ingress**. Дополнительные настройки в Ingress можно передать с помощью аннотаций. Для директивы **rewrite-target** нужно использовать аннотацию `nginx.ingress.kubernetes.io/rewrite-target`. В нашем случае `/$2` означает: "заменить локейшн на 2-ую группу из регулярного выражения `/myapp($|/)(.*)` - т.е. фактически отрезать часть `/myapp($|/)`". Это то, что нам надо. 
-
-Заменим манифест ингресса. 
+Обновим манифест **ингресса**: 
 
 <pre class="file" data-filename="./ingress.yaml" data-target="replace">
 apiVersion: networking.k8s.io/v1beta1
@@ -113,18 +109,46 @@ spec:
 
 `kubectl apply -f ingress.yaml`{{execute T1}}
 
-Теперь обращаясь по урлу `/myapp/version` балансировщик будет отдавать версию сервиса `hello-service`:
+**Ингресс контроллер** обновил конфигурацию **nginx**, теперь, обращаясь по урлу `/` балансировщик будет отдавать **404**-ую ошибку (не найдено): 
+
+`curl $NGINX_EXTERNAL_IP/`{{execute T1}}
+
+```
+controlplane $ curl $NGINX_EXTERNAL_IP/
+<html>
+<head><title>404 Not Found</title></head>
+<body>
+<center><h1>404 Not Found</h1></center>
+<hr><center>nginx</center>
+</body>
+</html>
+
+```
+
+Обращаясь по урлу `/myapp/version` , балансировщик будет отдавать версию сервиса `hello-service`:
 
 `curl $NGINX_EXTERNAL_IP/myapp/version`{{execute T1}}
+
+```
+controlplane $ curl $NGINX_EXTERNAL_IP/myapp/version
+{"version": "1"}
+```
 
 А по `/myapp/` :
 
 `curl $NGINX_EXTERNAL_IP/myapp/`{{execute T1}}
 
-будет отдавать 
+будет отдавать :
 
+```controlplane $ curl $NGINX_EXTERNAL_IP/myapp/
+Hello world from hello-deployment-d67cff5cc-fhcl5!
+```
 
-
-Также мы с вами можем посмотреть, как выглядит конфигурация балансировщика nginx, с помощью команды:
+Также мы с вами можем посмотреть, как выглядит конфигурация балансировщика **nginx**, с помощью команды:
 
 `kubectl exec deploy/nginx-nginx-ingress-controller -n kube-system -- cat /etc/nginx/nginx.conf`{{execute T1}}
+
+
+
+
+
