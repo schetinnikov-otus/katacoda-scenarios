@@ -8,7 +8,7 @@
 
 Запустим в цикле команду, которая из всех *подов* `kube-system`, отфильтрует *под* **ингресс** **контроллера** по меткам `app.kubernetes.io/name` и `app.kubernetes.io/component`. 
 
-`watch kubectl get -n kube-system pod -l app.kubernetes.io/name=nginx-ingress-controller -l app.kubernetes.io/component=controller` {{execute T1}}
+`watch kubectl get -n kube-system pod -l app.kubernetes.io/name=nginx-ingress-controller -l app.kubernetes.io/component=controller`{{execute T1}}
 
 Дождемся пока *под* **ингресс** **контроллера** не окажется в статусе **Running**. 
 

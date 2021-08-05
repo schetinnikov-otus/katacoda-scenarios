@@ -1,5 +1,3 @@
-## Запуск приложения
-
 Создадим **deployment.yaml**: 
 
 <pre class="file" data-filename="./deployment.yaml" data-target="replace">

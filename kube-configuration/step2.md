@@ -78,7 +78,7 @@ cG9zdGdyZXNxbCtwc3ljb3BnMjovL215dXNlcjpwYXNzd2RAcG9zdGdyZXMubXlhcHAuc3ZjLmNs
 dXN0ZXIubG9jYWw6NTQzMi9teWFwcA==
 ```
 
-Применим манифест **config.yaml**: 
+Применим манифест **secret.yaml**: 
 
 `kubectl apply -f secret.yaml`{{execute T1}}
 
@@ -92,7 +92,11 @@ NAME           TYPE     DATA   AGE
 hello-secret   Opaque   1      3s
 ```
 
-В **Secret** данные не показываются, но если запросить в формате **yaml** или **json**, то там будет закодированная строка:
+Если мы сделаем `kubectl describe`, то данных из **Secret**-а мы не получи: 
+
+`kubectl describe secret hello-secret`{{execute T1}}
+
+Но если запросить в формате **yaml** или **json**, то там будет закодированная строка:
 
 `kubectl get secret -o json hello-secret`{{execute T1}}
 
