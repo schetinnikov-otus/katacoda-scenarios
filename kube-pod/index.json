@@ -1,7 +1,7 @@
 {
-    "pathwayTitle": "Kubernetes",
-    "title": "Kubernetes",
-    "description": "Kubernetes",
+    "pathwayTitle": "Kubernetes pod",
+    "title": "Pod",
+    "description": "Pod",
     "difficulty": "beginner",
     "time": "10 minutes",
     "details": {

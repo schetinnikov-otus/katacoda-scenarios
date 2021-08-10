@@ -1,7 +1,7 @@
 {
-    "pathwayTitle": "Kubernetes",
-    "title": "Kubernetes",
-    "description": "Kubernetes",
+    "pathwayTitle": "Kubernetes service",
+    "title": "Service",
+    "description": "Service",
     "difficulty": "beginner",
     "time": "10 minutes",
     "details": {

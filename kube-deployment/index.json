@@ -1,7 +1,7 @@
 {
-    "pathwayTitle": "Kubernetes",
-    "title": "Kubernetes",
-    "description": "Kubernetes",
+    "pathwayTitle": "Kubernetes deployment",
+    "title": "Deployment",
+    "description": "Deployment",
     "difficulty": "beginner",
     "time": "30 minutes",
     "details": {

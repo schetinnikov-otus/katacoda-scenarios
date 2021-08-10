@@ -1,9 +1,9 @@
 {
-    "pathwayTitle": "Kubernetes",
-    "title": "Kubernetes",
-    "description": "Kubernetes",
+    "pathwayTitle": "Kubernetes components",
+    "title": "Основные компоненты Kubernetes",
+    "description": "Основные компоненты Kubernetes",
     "difficulty": "beginner",
-    "time": "30 minutes",
+    "time": "40 minutes",
     "details": {
         "steps": [
             {

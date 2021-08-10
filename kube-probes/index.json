@@ -1,7 +1,7 @@
 {
-    "pathwayTitle": "Kubernetes",
-    "title": "Kubernetes",
-    "description": "Kubernetes",
+    "pathwayTitle": "Kubernetes probes",
+    "title": "Механизм проверок в Kubernetes",
+    "description": "Механизм проверок в Kubernetes",
     "difficulty": "beginner",
     "time": "10 minutes",
     "details": {
