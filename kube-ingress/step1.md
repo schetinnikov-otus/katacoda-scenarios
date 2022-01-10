@@ -19,13 +19,6 @@
 Можно посмотреть на настройки этого сервиса:
 `kubectl describe svc nginx-nginx-ingress-controller -n kube-system`{{execute T1}}
 
-kubectl get -n nginx-ingress pod -l app=nginx-ingress
-
-kubectl describe svc -n nginx-ingress nginx-ingress
-
-NGINX_EXTERNAL_IP=$(kubectl get service nginx-ingress -n nginx-ingress -o jsonpath="{.status.loadBalancer.ingress[0].ip}")
-
-
 Сохраним значение внешнего **IP** в переменную окружения `NGINX_EXTERNAL_IP`.
 
 `NGINX_EXTERNAL_IP=$(kubectl get service nginx-nginx-ingress-controller -n kube-system -o jsonpath="{.status.loadBalancer.ingress[0].ip}")`{{execute T1}}
