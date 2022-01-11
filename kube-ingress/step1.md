@@ -4,7 +4,7 @@
 
 `helm repo add bitnami https://charts.bitnami.com/bitnami`{{execute T1}}
 
-`helm install nginx bitnami/nginx-ingress-controller -n kube-system`{{execute T1}}
+`helm install nginx bitnami/nginx-ingress-controller -n kube-system --version 7.6.21`{{execute T1}}
 
 Запустим в цикле команду, которая из всех *подов* `kube-system`, отфильтрует *под* **ингресс** **контроллера** по меткам `app.kubernetes.io/name` и `app.kubernetes.io/component`. 
 
